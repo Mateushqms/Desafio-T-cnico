@@ -25,7 +25,7 @@ O objetivo é demonstrar **interoperabilidade entre os serviços**, validando co
 │   ├── test_superset1.png
 │   └── test_superset.png
 ├── init_scripts
-│   └── init.sql
+│   └── init.sh
 └── README.md
 ```
 ---
@@ -38,12 +38,12 @@ O objetivo é demonstrar **interoperabilidade entre os serviços**, validando co
   - Metadados do **Airflow** (`airflow_meta`)
   - Metadados do **Superset** (`superset_meta`)
   - Dados de análise (`analytics`)
-- Inicializa automaticamente os bancos e as roles via script `docker/postgres/init.sql`
+- Inicializa automaticamente os bancos e as roles via script `init_scripts/init.sh`
 
 ### Airflow
 
 - Usa **Postgres** como banco de metadados
-- Cria automaticamente o usuário padrão de acesso no Docker Compose:
+- Cria automaticamente o usuário padrão de acesso no Docker Compose nas váriaveis ambiente:
   - Usuário: `airflow`
   - Senha: `airflow`
 - Executa em modo **standalone**, com webserver e scheduler ativos
@@ -63,12 +63,16 @@ O objetivo é demonstrar **interoperabilidade entre os serviços**, validando co
 Antes de iniciar, instale:
 
 - [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose]()
+- [Docker Compose](https://docs.docker.com/compose/install/)
 ---
 
 ## Configuração do Ambiente
 
-1. Crie o arquivo `.env` a partir do exemplo `.env.example`:
+1. Clone o Repositório.
+   ```
+   git clone git@github.com:Mateushqms/Desafio-T-cnico.git
+   ```
+2. Crie o arquivo `.env` a partir do exemplo `.env.example`:
 
 2. Suba o ambiente com o Docker Compose:
     ```
@@ -80,15 +84,15 @@ Antes de iniciar, instale:
 
 1. Acesse o Airflow: [http://localhost:8080](http://localhost:8080)
 2. Faça login:
-   - Usuário: `airflow`
-   - Senha: `airflow`
+   - Usuário: `airflow` configuradas no .env em `_AIRFLOW_WWW_USER_USERNAME`.
+   - Senha: `airflow` configuradas no .env em `_AIRFLOW_WWW_USER_PASSWORD`.
 3. Vá em **Admin → Connections**
 4. Procure por `postgres_default` e clique em **Edit Record**
 5. Preencha:
-   - Database: `airflow_meta`
-   - Login: valor de `POSTGRES_USER` no `.env`
-   - Senha: valor de `POSTGRES_PASSWORD` no `.env`
    - Host: `postgres`
+   - Database: `analytics`
+   - Login: valor de `POSTGRES_USER_AIRFLOW` no `.env`
+   - Senha: valor de `POSTGRES_PASSWORD_AIRFLOW` no `.env`
    - Port: `5432`
 6. Clique em **Test**
 7. Uma mensagem de sucesso confirmará a interoperabilidade **Airflow → Postgres**
@@ -117,7 +121,7 @@ Antes de iniciar, instale:
    - Host: `postgres`
    - Port: `5432`
    - Database: `analytics`
-   - Login/Senha: valores definidos no `.env` em POSTGRES_USER e POSTGRES_PASSWORD
+   - Login/Senha: valores definidos no `.env` em `POSTGRES_USER_ANALYTICS` e `POSTGRES_PASSWORD_ANALYTICS`
 
 5. Clique em **Connect**
 6. Se não der a mensagem "Connection Failed ..." e ir para uma próxima etapa, está funcionando, só clicar em finish.
@@ -130,6 +134,6 @@ Antes de iniciar, instale:
 1. No Superset, selecione **Connect Database → PostgreSQL**
 2. Clique em **“Connect this database with SQLAlchemy URI string instead”**
 3. Informe a URI abaixo (substituindo as variáveis do `.env`):
-4. postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@postgres:5432/analytics
+4. postgresql+psycopg2://{POSTGRES_USER_ANALYTICS}:{POSTGRES_PASSWORD_ANALYTICS}@postgres:5432/{POSTGRES_DATABASE_ANALYTICS}
 
 ![](/evidencias/test_superset.png)
