@@ -87,8 +87,10 @@ Antes de iniciar, instale:
    - Usuário: `airflow` configuradas no .env em `_AIRFLOW_WWW_USER_USERNAME`.
    - Senha: `airflow` configuradas no .env em `_AIRFLOW_WWW_USER_PASSWORD`.
 3. Vá em **Admin → Connections**
-4. Procure por `postgres_default` e clique em **Edit Record**
+4. Clique no `+` "Add a new record"
 5. Preencha:
+   - Connection id: `postgres_default`
+   - Connection type: `Postgres`
    - Host: `postgres`
    - Database: `analytics`
    - Login: valor de `POSTGRES_USER_AIRFLOW` no `.env`
