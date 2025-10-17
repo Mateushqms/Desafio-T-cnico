@@ -16,7 +16,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    restart: always
 
   airflow:
     build: .
@@ -40,10 +39,12 @@ services:
     command: standalone
     volumes:
       - ./dags:/opt/airflow/dags
-    restart: always
 
   superset:
-    image: apache/superset:latest
+    build:
+        context: .
+        dockerfile: Dockerfile.superset
+      
     depends_on:
       postgres:
         condition: service_healthy
@@ -55,13 +56,11 @@ services:
       - "8088:8088"
     command: >
       /bin/sh -c "
-      pip install psycopg2-binary &&
       superset fab create-admin --username admin --firstname Admin --lastname User --email admin@superset.com --password admin &&
       superset db upgrade &&
       superset init &&
       superset run -h 0.0.0.0 -p 8088
       "
-    restart: always
 
 
 volumes:
