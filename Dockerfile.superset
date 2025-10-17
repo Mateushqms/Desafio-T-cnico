@@ -1,4 +1,4 @@
-FROM apache/superset:39973cd38e901fbf3e4d1ca491214641d5075906-lean-linux-amd64-3.9-slim-bookworm
+FROM apache/superset:latest
 
 USER root
 
